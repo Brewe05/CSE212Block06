@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 public static class Arrays
 {
     /// <summary>
@@ -8,12 +10,17 @@ public static class Arrays
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
     public static double[] MultiplesOf(double number, int length)
     {
-        // TODO Problem 1 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+        //first we must increase the index we are currently posisioned at using a for loop
+        //we then need to esure index 0 starts with 7 because it is our first multiplication if we choose 7
+        //we then need to increment by using i as the multiplyer and index 1 which is our number to multiply
+        //then we need to store each number of our multiple into the array
+        double[] answer = new double[length];
+        for (int i = 0; i < length; i++)
+        {
+            answer[i] = (i + 1) * number;
+        }
 
-        return []; // replace this return statement with your own
+        return answer; // replace this return statement with your own
     }
 
     /// <summary>
@@ -24,10 +31,17 @@ public static class Arrays
     /// Because a list is dynamic, this function will modify the existing data list rather than returning a new list.
     /// </summary>
     public static void RotateListRight(List<int> data, int amount)
-    {
-        // TODO Problem 2 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+    {   // first we need to declare i = 0
+        // We then need to make a while loop that checks if i < amount
+        // we then need to insert the data into variable to hold it then remove it from the array and insert it using the variable into the array
+        // we need to increase i
+        int i = 0;
+        while(i < amount)
+        {
+            int last = data[data.Count -1]; //this takes the last value in the array
+            data.RemoveAt(data.Count -1); //remove that read value
+            data.Insert(0, last); //insert the read value into the beginning of the array
+            i++;//increase i
+        }
     }
 }

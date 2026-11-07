@@ -10,7 +10,29 @@ public static class ArraySelector
     }
 
     private static int[] ListSelector(int[] list1, int[] list2, int[] select)
-    {
-        return [];
+    {   
+        //this will help keep track of where we last took the value from which index
+        int taker1 = 0;
+        int taker2 = 0;
+        //create the result array
+        var result = new List<int>();
+        //start at index 0 of select and then increase after each iteration
+        for (int i = 1; i < select.Length; i++)
+        {
+            //if i is 1 then take from li1
+            if (select[i] == 1)
+            {
+                result.Add(list1[taker1]);
+                ++taker1;
+            }
+            //if i = 2 then thake from li2
+            else
+            {
+                result.Add(list2[taker2]);
+                ++taker2;
+            }
+        }
+        //repeats the process
+        return result.ToArray();
     }
 }
