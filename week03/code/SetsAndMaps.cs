@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Text.Json;
 
 public static class SetsAndMaps
@@ -21,8 +22,25 @@ public static class SetsAndMaps
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        var wordSet = new HashSet<string>(words);
+        var pairs = new List<string>();
+        var processed = new HashSet<string>();
+
+        foreach (var word in words){
+            string reverse = $"{word[1]}{word[0]}";
+
+            if (word[0] != word[1] &&
+                wordSet.Contains(reverse) &&
+                !processed.Contains(word) &&
+                !processed.Contains(reverse))
+            {
+                pairs.Add($"{word} & {reverse}");
+                processed.Add(word);
+                processed.Add(reverse);
+            }
+        }
+
+    return pairs.ToArray();
     }
 
     /// <summary>
@@ -42,7 +60,15 @@ public static class SetsAndMaps
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+            string degree = fields[3].Trim();
+            if (degrees.ContainsKey(degree))
+            {
+                degrees[degree]++;
+            }
+            else
+            {
+                degrees.Add(degree, 1);
+            }
         }
 
         return degrees;
@@ -66,8 +92,37 @@ public static class SetsAndMaps
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        word1 = word1.Replace(" ", "").ToLower(); //Remove the spaces and make everything lowercase
+        word2 = word2.Replace(" ", "").ToLower();
+        if (word1.Length != word2.Length)
+        {
+            return false; //if there are more letters in one word than the other then not anagram
+        }
+        var letters = new Dictionary<char, int>(); //create dictionary to store letters and how many times they appear
+        foreach (char letter in word1) // begin letter counting in first word
+        {
+            if (letters.ContainsKey(letter)) //if letter is already in dictionary then add one to letter
+            {
+                letters[letter]++;
+            }
+            else
+            {
+                letters.Add(letter, 1); //if letter not in dictionary then add letter
+            }
+        }
+        foreach (char letter in word2) //check word 2 if it contains stored letters from word1 in dictionary
+        {
+            if (!letters.ContainsKey(letter))
+            {
+                return false; //cannot be anagram if letter doesnt exist
+            }
+            letters[letter]--;
+            if(letters[letter] < 0)
+            {
+                return false; //cannot be anagram if letter appears more in word1 compared to word2
+            }
+        }
+        return true; //if passes all tests above then is anagram
     }
 
     /// <summary>
@@ -101,6 +156,20 @@ public static class SetsAndMaps
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
         // 3. Return an array of these string descriptions.
-        return [];
+        
+        var earthquakes = new List<string>();// store data as string in a list
+        if (featureCollection == null) //check json convert to object success
+        {
+            return earthquakes.ToArray();
+        }
+        foreach (var feature in featureCollection.Features) //loops through data
+        {
+            //get location + magnitude from json
+            string place = feature.Properties.Place;
+            double? magnitude = feature.Properties.Mag;
+            earthquakes.Add($"{place} - Mag {magnitude}");//combine data into one string to display
+        }
+        //make list an array and return data
+        return earthquakes.ToArray();
     }
 }
